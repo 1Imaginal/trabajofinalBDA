@@ -26,4 +26,18 @@ public class ConectorMySQL {
         return resultado;
     }
 
+    public ResultSet leerCity() throws SQLException{
+        Statement statement = con.createStatement();
+        ResultSet resultado = statement.executeQuery("SELECT * FROM city");
+        System.out.println("Return value is : " + resultado.toString() );
+        return resultado;
+    }
+
+    public ResultSet leerCountryLanguage() throws SQLException{
+        Statement statement = con.createStatement();
+        ResultSet resultado = statement.executeQuery("SELECT * FROM city");
+        System.out.println("Return value is : " + resultado.toString() );
+        return resultado;
+    }
+
 }

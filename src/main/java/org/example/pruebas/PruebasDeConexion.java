@@ -18,9 +18,7 @@ import java.util.Map;
 
 import com.google.gson.Gson;
 import org.bson.Document;
-import org.neo4j.driver.Driver;
 import org.neo4j.driver.Session;
-import org.neo4j.driver.Values;
 
 
 public class PruebasDeConexion {
@@ -37,7 +35,12 @@ public class PruebasDeConexion {
             while (resultadoCountry.next()) {
                 HashMap<String, Object> country = new HashMap<>();
                 for (int i = 1; i <= columnsNumber; i++) {
-                    country.put(metaDataCountry.getColumnName(i), resultadoCountry.getObject(i));
+                    String columnName = metaDataCountry.getColumnName(i);
+                    Object columnValue = resultadoCountry.getObject(i);
+                    if (columnValue == null) {
+                        columnValue = getDefaultColumnValue(columnName, metaDataCountry, i);
+                    }
+                    country.put(columnName, columnValue);
                 }
                 paises.add(country);
             }
@@ -111,6 +114,17 @@ public class PruebasDeConexion {
 
         } catch (Exception e) {
             System.out.println("Ocurrió un error: " + e.getMessage());
+        }
+    }
+    private static Object getDefaultColumnValue(String columnName, ResultSetMetaData metaData, int columnIndex) throws SQLException {
+        int columnType = metaData.getColumnType(columnIndex);
+        switch (columnType) {
+            case Types.DECIMAL:
+                return new Decimal128(BigDecimal.ZERO);
+            case Types.INTEGER:
+                return 0;
+            default:
+                return null;
         }
     }
 }

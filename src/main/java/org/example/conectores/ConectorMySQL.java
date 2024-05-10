@@ -3,12 +3,11 @@ package org.example.conectores;
 import java.sql.*;
 
 public class ConectorMySQL {
-    Connection con = null;
+    Connection con;
     public Connection Conexion(){
 
         try {
-            con =
-                    DriverManager.getConnection("jdbc:mysql://localhost/world?" +
+            con = DriverManager.getConnection("jdbc:mysql://localhost/world?" +
                             "user=root&password=admin&serverTimezone=UTC");
             this.con = con;
             System.out.println("Conexion exitosa a MySQL");
@@ -19,23 +18,9 @@ public class ConectorMySQL {
         }
         return con;
     }
-    public ResultSet leerCountry() throws SQLException{
+    public ResultSet leer(String tabla) throws SQLException{
         Statement statement = con.createStatement();
-        ResultSet resultado = statement.executeQuery("SELECT * FROM country");
-        System.out.println("Return value is : " + resultado.toString() );
-        return resultado;
-    }
-
-    public ResultSet leerCity() throws SQLException{
-        Statement statement = con.createStatement();
-        ResultSet resultado = statement.executeQuery("SELECT * FROM city");
-        System.out.println("Return value is : " + resultado.toString() );
-        return resultado;
-    }
-
-    public ResultSet leerCountryLanguage() throws SQLException{
-        Statement statement = con.createStatement();
-        ResultSet resultado = statement.executeQuery("SELECT * FROM city");
+        ResultSet resultado = statement.executeQuery("SELECT * FROM " + tabla);
         System.out.println("Return value is : " + resultado.toString() );
         return resultado;
     }

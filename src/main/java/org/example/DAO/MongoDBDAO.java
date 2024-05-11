@@ -25,7 +25,7 @@ public class MongoDBDAO {
             documents.add(document);
         }
         conectorMongoDB.mongoClient.getDatabase("world").getCollection(collection).insertMany(documents);
-        System.out.println("Documentos insertados en la base de datos");
+        System.out.println("Documentos insertados en " + collection);
 
     }
 

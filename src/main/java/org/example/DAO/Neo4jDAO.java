@@ -2,10 +2,8 @@ package org.example.DAO;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.neo4j.driver.AuthTokens;
-import org.neo4j.driver.Driver;
-import org.neo4j.driver.GraphDatabase;
-import org.neo4j.driver.Session;
+import org.neo4j.driver.*;
+import org.neo4j.driver.exceptions.NoSuchRecordException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,6 +45,15 @@ public class Neo4jDAO {
             System.out.println(nombre + " creado");
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public void ejecutarConsultaCypher(String consulta) {
+        try (Transaction tx = session.beginTransaction()) {
+            tx.run(consulta);
+            tx.commit();
+        } catch (NoSuchRecordException e) {
+            System.err.println("Error al ejecutar la consulta Cypher: " + e.getMessage());
         }
     }
 }

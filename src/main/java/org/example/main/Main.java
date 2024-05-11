@@ -39,9 +39,19 @@ public class Main {
 
         Neo4jDAO neo4jDAO = new Neo4jDAO();
         neo4jDAO.setSession(conectorNeo4j.getDriver().session());
+        neo4jDAO.ejecutarConsultaCypher("MATCH (:Ciudades)-[r:PERTENECE_A]->(:Paises) DELETE r");
+        neo4jDAO.ejecutarConsultaCypher("MATCH (:IdiomasPaises)-[r:SE_HABLA_EN]->(:Paises) DELETE r");
         neo4jDAO.limpiarNeo4j();
         neo4jDAO.crearNodos("Paises", paisesMongoDB);
         neo4jDAO.crearNodos("IdiomasPaises", idiomasMongoDB);
         neo4jDAO.crearNodos("Ciudades", ciudadesMongoDB);
+
+        String crearRelacionesCiudadPais = "MATCH (c:Ciudades), (p:Paises) " + "WHERE c.CountryCode = p.Code " +
+                "CREATE (c)-[:PERTENECE_A]->(p)";
+
+        String crearRelacionesIdiomaPais = "MATCH (i:IdiomasPaises), (p:Paises) " + "WHERE i.CountryCode = p.Code " +
+                "CREATE (i)-[:SE_HABLA_EN]->(p)";
+        neo4jDAO.ejecutarConsultaCypher(crearRelacionesCiudadPais);
+        neo4jDAO.ejecutarConsultaCypher(crearRelacionesIdiomaPais);
     }
 }
